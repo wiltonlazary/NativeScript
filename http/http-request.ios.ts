@@ -1,23 +1,36 @@
 ﻿/**
  * iOS specific http request implementation.
  */
+
+declare var __inspectorTimestamp;
 import http = require("http");
 import imageSource = require("image-source");
 import types = require("utils/types");
 import utils = require("utils/utils");
+import resource_data = require("./resource-data");
+import debuggerDomains = require("./../debugger/debugger");
 
 var GET = "GET";
 var USER_AGENT_HEADER = "User-Agent";
 var USER_AGENT = "Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25";
+var sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration();
+var queue = NSOperationQueue.mainQueue();
+var session = NSURLSession.sessionWithConfigurationDelegateDelegateQueue(sessionConfig, null, queue);
+
+export var domainDebugger: any;
 
 export function request(options: http.HttpRequestOptions): Promise<http.HttpResponse> {
     return new Promise<http.HttpResponse>((resolve, reject) => {
 
         try {
-            var sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration();
-            var queue = NSOperationQueue.mainQueue();
-            var session = NSURLSession.sessionWithConfigurationDelegateDelegateQueue(
-                sessionConfig, null, queue);
+            // var sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration();
+            // var queue = NSOperationQueue.mainQueue();
+            // var session = NSURLSession.sessionWithConfigurationDelegateDelegateQueue(
+            //     sessionConfig, null, queue);
+
+            var requestId = Math.random().toString();
+            var resourceData = new resource_data.ResourceData(requestId);
+            domainDebugger.resource_datas[requestId] = resourceData;
 
             var urlRequest = NSMutableURLRequest.requestWithURL(
                 NSURL.URLWithString(options.url));
@@ -56,6 +69,27 @@ export function request(options: http.HttpRequestOptions): Promise<http.HttpResp
                             }
                         }
 
+                        domainDebugger.resource_datas[requestId].mimeType = response.MIMEType;
+                        domainDebugger.resource_datas[requestId].data = data;
+                        var debugResponse = {
+                            // Response URL. This URL can be different from CachedResource.url in case of redirect.
+                            url: options.url,
+                            // HTTP response status code.
+                            status: response.statusCode,
+                            // HTTP response status text.
+                            statusText: NSHTTPURLResponse.localizedStringForStatusCode(response.statusCode),
+                            // HTTP response headers.
+                            headers: headers,
+                            // HTTP response headers text.
+                            mimeType: response.MIMEType,
+                            fromDiskCache: false
+                        }
+
+                        // Loader Identifier is hardcoded in the runtime and should be the same string
+                        // __inspectorTimestamp is provided by the runtime and returns a frontend friendly timestamp 
+                        domainDebugger.events.responseReceived(requestId, "NativeScriptMainFrameIdentifier", "Loader Identifier", __inspectorTimestamp(), exports.domainDebugger.resource_datas[requestId].resourceType, debugResponse);
+                        domainDebugger.events.loadingFinished(requestId, __inspectorTimestamp());
+
                         resolve({
                             content: {
                                 raw: data,
@@ -93,6 +127,16 @@ export function request(options: http.HttpRequestOptions): Promise<http.HttpResp
                         });
                     }
                 });
+
+            if(options.url) {
+                var request = {
+                        url: options.url,
+                        method: "GET",
+                        headers: options.headers
+                };
+
+                domainDebugger.events.requestWillBeSent(requestId, "NativeScriptMainFrameIdentifier", "Loader Identifier", options.url, request, __inspectorTimestamp(), { type: 'Script' });
+            }
 
             dataTask.resume();
         } catch (ex) {
