@@ -41,11 +41,11 @@ export class ResourceData {
                 resourceType = documentTypeByMimeType[this._mimeType];
             }
 
-            if(this._mimeType.indexOf("image/") != -1) {
+            if(this._mimeType.indexOf("image/") !== -1) {
                 resourceType = "Image";
             }
 
-            if (this._mimeType.indexOf("font/") != -1) {
+            if (this._mimeType.indexOf("font/") !== -1) {
                 resourceType = "Font";
             }
 
@@ -58,7 +58,7 @@ export class ResourceData {
     }
 
     get hasTextContent(): boolean {
-        return [ "Document", "Stylesheet", "Script", "XHR" ].indexOf(this._resourceType) != -1;
+        return [ "Document", "Stylesheet", "Script", "XHR" ].indexOf(this._resourceType) !== -1;
     }
 
     get data(): any {
