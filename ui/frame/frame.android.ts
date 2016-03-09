@@ -669,7 +669,7 @@ class FragmentClass extends android.app.Fragment {
 }
 
 @JavaProxy("com.tns.NativeScriptActivity")
-class NativeScriptActivity extends android.app.Activity {
+class NativeScriptActivity extends android.support.v7.app.AppCompatActivity {
     private rootView: View;
 
     constructor() {
@@ -787,7 +787,7 @@ class NativeScriptActivity extends android.app.Activity {
         trace.write("NativeScriptActivity.onBackPressed;", trace.categories.NativeLifecycle);
 
         var args = <application.AndroidActivityBackPressedEventData>{
-            eventName: "activityBackPressed",
+            eventName: application.AndroidApplication.activityBackPressedEvent,
             object: application.android,
             activity: this,
             cancel: false,
@@ -813,12 +813,25 @@ class NativeScriptActivity extends android.app.Activity {
         }
 
         application.android.notify(<application.AndroidActivityResultEventData>{
-            eventName: "activityResult",
+            eventName: application.AndroidApplication.activityResultEvent,
             object: application.android,
             activity: this,
             requestCode: requestCode,
             resultCode: resultCode,
             intent: data
+        });
+    }
+
+    public onRequestPermissionsResult(requestCode: number, permissions: Array<string>, grantResults: Array<number>): void {
+        trace.write(`NativeScriptActivity.onRequestPermissionsResult(${requestCode}, ${permissions}, ${grantResults})`, trace.categories.NativeLifecycle);
+
+        application.android.notify(<application.AndroidRequestPermissionsResultEventData>{
+            eventName: application.AndroidApplication.requestPermissionsEvent,
+            object: application.android,
+            activity: this,
+            requestCode: requestCode,
+            permissions: permissions,
+            grantResults: grantResults
         });
     }
 }

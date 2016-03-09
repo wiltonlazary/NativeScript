@@ -1,0 +1,6 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="onLoaded">
+  <StackLayout>
+    <Button text="Request READ_EXTERNAL_STORAGE" tap="onRequestTap" />
+    <Label text="{{ result, 'Permission: ' + result }}" />
+  </StackLayout>
+</Page>

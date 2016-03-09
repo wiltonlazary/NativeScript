@@ -69,7 +69,7 @@ declare module "application" {
          * The name of the event.
          */
         eventName: string;
-        
+
         /**
          * The instance that has raised the event.
          */
@@ -79,7 +79,7 @@ declare module "application" {
     /**
      * Event data containing information for launch event.
      */
-    export interface LaunchEventData extends ApplicationEventData {        
+    export interface LaunchEventData extends ApplicationEventData {
         /**
          * The root view for this Window on iOS or Activity for Android.
          * If not set a new Frame will be created as a root view in order to maintain backwards compatibility.
@@ -299,6 +299,28 @@ declare module "application" {
     }
 
     /**
+     * This interface is the contract for receiving the results for permission requests.
+     */
+    export interface AndroidRequestPermissionsResultEventData extends AndroidActivityEventData {
+        /**
+         * The request code.
+         */
+        requestCode: number;
+
+        /**
+         * The requested permissions. Never null.
+         */
+        permissions: Array<string>;
+
+        /**
+         * The grant results for the corresponding permissions
+         * which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+         *  or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+         */
+        grantResults: Array<number>;
+    }
+
+    /**
      * Data for the Android activity back pressed event.
      */
     export interface AndroidActivityBackPressedEventData extends AndroidActivityEventData {
@@ -386,7 +408,7 @@ declare module "application" {
          * [Deprecated. Please use the respective event instead.] Direct handler of the onActivityResult method.
          */
         onActivityResult: (requestCode: number, resultCode: number, data: any /* android.content.Intent */) => void;
-            
+
         /**
          * A basic method signature to hook an event listener (shortcut alias to the addEventListener method).
          * @param eventNames - String corresponding to events (e.g. "propertyChange"). Optionally could be used more events separated by `,` (e.g. "propertyChange", "change"). 
@@ -436,9 +458,15 @@ declare module "application" {
         on(event: "activityResult", callback: (args: AndroidActivityResultEventData) => void, thisArg?: any);
 
         /**
-         * This event is raised on the back button is pressed in an android application.
+         * This event is raised when back button is pressed.
          */
         on(event: "activityBackPressed", callback: (args: AndroidActivityBackPressedEventData) => void, thisArg?: any);
+
+        /**
+         * This event is raised when a security permission is requested.
+         * Only on Android 6.0+ and targetSDK >= 23.
+         */
+        on(event: "requestPermissions", callback: (args: AndroidRequestPermissionsResultEventData) => void, thisArg?: any);
 
         /**
          * String value used when hooking to activityCreated event.
@@ -484,6 +512,11 @@ declare module "application" {
          * String value used when hooking to activityBackPressed event.
          */
         public static activityBackPressedEvent: string;
+
+        /**
+         * String value used when hooking to requestPermissions event.
+         */
+        public static requestPermissionsEvent: string;
 
         /**
          * Register a BroadcastReceiver to be run in the main activity thread. The receiver will be called with any broadcast Intent that matches filter, in the main application thread. 

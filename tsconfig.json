@@ -46,6 +46,8 @@
         "apps/action-bar-demo/pages/data-binding.ts",
         "apps/action-bar-demo/pages/navigation-button.ts",
         "apps/action-bar-demo/pages/page-title-icon.ts",
+    "apps/android-new-permissions/app.ts",
+    "apps/android-new-permissions/main-page.ts",
         "apps/animations/app.ts",
         "apps/animations/main-page.ts",
         "apps/animations/model.ts",

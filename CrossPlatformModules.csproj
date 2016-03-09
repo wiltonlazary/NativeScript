@@ -82,6 +82,10 @@
     <TypeScriptCompile Include="apps\action-bar-demo\pages\data-binding.ts">
       <DependentUpon>data-binding.xml</DependentUpon>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="apps\android-new-permissions\app.ts" />
+    <TypeScriptCompile Include="apps\android-new-permissions\main-page.ts">
+      <DependentUpon>main-page.xml</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="apps\animations\opacity.ts" />
     <TypeScriptCompile Include="apps\custom-root-view\app.ts" />
     <TypeScriptCompile Include="apps\perf-tests\NavigationTest\list-picker-page.ts" />
@@ -131,6 +135,9 @@
     <Content Include="apps\action-bar-demo\pages\center-view.xml" />
     <Content Include="apps\action-bar-demo\pages\data-binding.xml" />
     <Content Include="apps\action-bar-demo\pages\all-between-tags.xml" />
+    <Content Include="apps\android-new-permissions\main-page.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="apps\animations\opacity.css" />
     <Content Include="apps\animations\opacity.xml">
       <SubType>Designer</SubType>
@@ -2096,6 +2103,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="apps\tests\file-system-access-tests\folder\file.expected" />
+    <Content Include="apps\android-new-permissions\package.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="js-libs\esprima\LICENSE.BSD" />
     <Content Include="source-control.md" />
     <Content Include="ui\segmented-bar\package.json">
@@ -2193,7 +2203,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties ui_2layouts_2wrap-layout_2package_1json__JSONSchema="http://json.schemastore.org/package" ui_2layouts_2grid-layout_2package_1json__JSONSchema="" ui_2layouts_2dock-layout_2package_1json__JSONSchema="" ui_2layouts_2absolute-layout_2package_1json__JSONSchema="http://json.schemastore.org/package" ui_2web-view_2package_1json__JSONSchema="http://json.schemastore.org/package" ui_2content-view_2package_1json__JSONSchema="http://json.schemastore.org/package" apps_2gallery-app_2package_1json__JSONSchema="http://json.schemastore.org/package" apps_2absolute-layout-demo_2package_1json__JSONSchema="http://json.schemastore.org/package" apps_2editable-text-demo_2package_1json__JSONSchema="http://json.schemastore.org/package" ui_2scroll-view_2package_1json__JSONSchema="http://json.schemastore.org/package" />
+      <UserProperties ui_2scroll-view_2package_1json__JSONSchema="http://json.schemastore.org/package" apps_2editable-text-demo_2package_1json__JSONSchema="http://json.schemastore.org/package" apps_2absolute-layout-demo_2package_1json__JSONSchema="http://json.schemastore.org/package" apps_2gallery-app_2package_1json__JSONSchema="http://json.schemastore.org/package" ui_2content-view_2package_1json__JSONSchema="http://json.schemastore.org/package" ui_2web-view_2package_1json__JSONSchema="http://json.schemastore.org/package" ui_2layouts_2absolute-layout_2package_1json__JSONSchema="http://json.schemastore.org/package" ui_2layouts_2dock-layout_2package_1json__JSONSchema="" ui_2layouts_2grid-layout_2package_1json__JSONSchema="" ui_2layouts_2wrap-layout_2package_1json__JSONSchema="http://json.schemastore.org/package" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
