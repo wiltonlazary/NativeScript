@@ -1,7 +1,7 @@
 {
   "name": "tns-core-modules",
   "description": "Telerik NativeScript Core Modules",
-  "version": "2.0.0",
+  "version": "2.0.0-angular-4",
   "homepage":"https://www.nativescript.org",
   "repository": {
     "type": "git",
@@ -21,6 +21,9 @@
     "!gruntfile.js",
     "!org.nativescript.widgets.d.ts"
   ],
+  "publishConfig": {
+      "tag": "angular"
+  },
   "license": "Apache-2.0",
   "devDependencies": {
     "chai": "3.2.0",
