@@ -1,5 +1,4 @@
 ﻿import common = require("./editable-text-base-common");
-import textBase = require("ui/text-base");
 import dependencyObservable = require("ui/core/dependency-observable");
 import enums = require("ui/enums");
 import utils = require("utils/utils");
@@ -12,10 +11,6 @@ export class EditableTextBase extends common.EditableTextBase {
     /* tslint:disable */
     private _dirtyTextAccumulator: string;
     /* tslint:enable */
-
-    constructor(options?: textBase.Options) {
-        super(options);
-    }
 
     get android(): android.widget.EditText {
         return this._android;
@@ -133,7 +128,7 @@ export class EditableTextBase extends common.EditableTextBase {
 
     public _onTextPropertyChanged(data: dependencyObservable.PropertyChangeData) {
         if (this._android) {
-            var newValue = types.isNullOrUndefined(data.newValue) ? "" : data.newValue + "";
+            var newValue = types.toUIString(data.newValue);
             this.android.setText(newValue, android.widget.TextView.BufferType.EDITABLE);
         }
     }

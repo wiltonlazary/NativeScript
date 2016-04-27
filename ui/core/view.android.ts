@@ -268,9 +268,6 @@ export class View extends viewCommon.View {
             this._nativeView.setLayoutParams(new org.nativescript.widgets.CommonLayoutParams());
         }
 
-        utils.copyFrom(this._options, this);
-        delete this._options;
-
         // copy all the locally cached values to the native android widget
         this._syncNativeProperties();
         trace.notifyEvent(this, "_onContextChanged");
@@ -700,6 +697,23 @@ export class ViewStyler implements style.Styler {
     private static getTranslateYProperty(view: View): any {
         return view.translateY;
     }
+    
+    // z-index
+    private static getZIndexProperty(view: View): any {
+        return view.android.getZ ? view.android.getZ() : 0;
+    }
+
+    private static setZIndexProperty(view: View, newValue: any) {
+        if (view.android.setZ) {
+            view.android.setZ(newValue);
+        }
+    }
+
+    private static resetZIndexProperty(view: View, nativeValue: any) {
+        if (view.android.setZ) {
+            view.android.setZ(nativeValue);
+        }
+    }    
 
     public static registerHandlers() {
         style.registerHandler(style.visibilityProperty, new style.StylePropertyChangedHandler(
@@ -769,6 +783,11 @@ export class ViewStyler implements style.Styler {
             ViewStyler.setTranslateYProperty,
             ViewStyler.resetTranslateYProperty,
             ViewStyler.getTranslateYProperty));
+            
+        style.registerHandler(style.zIndexProperty, new style.StylePropertyChangedHandler(
+            ViewStyler.setZIndexProperty,
+            ViewStyler.resetZIndexProperty,
+            ViewStyler.getZIndexProperty));
     }
 }
 

@@ -417,13 +417,25 @@ function isOpacityValid(value: string): boolean {
     return !isNaN(parsedValue) && 0 <= parsedValue && parsedValue <= 1;
 }
 
-function isLetterSpacingValid(value: string): boolean {
+function isFloatValueValid(value: string): boolean {
     var parsedValue: number = parseFloat(value);
     return !isNaN(parsedValue);
 }
 
 function isFontWeightValid(value: string): boolean {
-    return value === enums.FontWeight.normal || value === enums.FontWeight.bold;
+    if (!value) {
+        console.trace();
+    }
+    return value === enums.FontWeight.thin
+        || value === enums.FontWeight.extraLight
+        || value === enums.FontWeight.light
+        || value === enums.FontWeight.normal || value === "400"
+        || value === enums.FontWeight.medium
+        || value === enums.FontWeight.semiBold
+        || value === enums.FontWeight.bold || value === "700"
+        || value === enums.FontWeight.extraBold
+        || value === enums.FontWeight.black
+        ;
 }
 
 function isFontStyleValid(value: string): boolean {
@@ -779,7 +791,14 @@ export class Style extends DependencyObservable implements styling.Style {
     }
     set letterSpacing(value: number) {
         this._setValue(letterSpacingProperty, value);
-    }    
+    }
+    
+    get zIndex(): number {
+        return this._getValue(zIndexProperty);
+    }
+    set zIndex(value: number) {
+        this._setValue(zIndexProperty, value);
+    }         
 
     public _updateTextDecoration() {
         if (this._getValue(textDecorationProperty) !== enums.TextDecoration.none) {
@@ -1073,7 +1092,10 @@ export var whiteSpaceProperty = new styleProperty.Property("whiteSpace", "white-
     new PropertyMetadata(undefined, AffectsLayout, undefined, isWhiteSpaceValid), converters.whiteSpaceConverter);
     
 export var letterSpacingProperty = new styleProperty.Property("letterSpacing", "letter-spacing",
-    new PropertyMetadata(Number.NaN, AffectsLayout, undefined, isLetterSpacingValid), converters.letterSpacingConverter);    
+    new PropertyMetadata(Number.NaN, AffectsLayout, undefined, isFloatValueValid), converters.floatConverter);
+    
+export var zIndexProperty = new styleProperty.Property("zIndex", "z-index",
+    new PropertyMetadata(Number.NaN, AffectsLayout, undefined, isFloatValueValid), converters.floatConverter);      
 
 // Helper property holding most layout related properties available in CSS.
 // When layout related properties are set in CSS we chache them and send them to the native view in a single call.

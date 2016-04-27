@@ -1,7 +1,7 @@
 ﻿import definition = require("controls-page");
 import {View} from "ui/core/view";
-import {Page} from "ui/page";
-import {topmost as topmostFrame, NavigationTransition} from "ui/frame";
+import {Page, NavigatedData} from "ui/page";
+import {topmost as topmostFrame, NavigationTransition, Frame} from "ui/frame";
 import {Orientation, AnimationCurve} from "ui/enums";
 import {StackLayout} from "ui/layouts/stack-layout";
 import {Button} from "ui/button";
@@ -10,6 +10,7 @@ import {TextField} from "ui/text-field";
 import {Switch} from "ui/switch";
 import {Slider} from "ui/slider";
 import {Color} from "color";
+import {ScrollView} from "ui/scroll-view";
 import * as platform from "platform";
 
 var availableTransitions = ["default", "custom", "flip", "flipRight", "flipLeft", "slide", "slideLeft", "slideRight", "slideTop", "slideBottom", "fade"];
@@ -38,25 +39,29 @@ export class NavPage extends Page implements definition.ControlsPage {
 
         var that = this;
         that.on(View.loadedEvent, (args) => {
-            console.log(`${args.object}.loadedEvent`);
+            console.log(`Loaded ${args.object}`);
             if (topmostFrame().android) {
                 topmostFrame().android.cachePagesOnNavigate = true;
             }
         });
         that.on(View.unloadedEvent, (args) => {
-            console.log(`${args.object}.unloadedEvent`);
+            console.log(`Unloaded ${args.object}`);
         });
-        that.on(Page.navigatingFromEvent, (args) => {
-            console.log(`${args.object}.navigatingFromEvent`);
+        that.on(Page.navigatingFromEvent, (args: NavigatedData) => {
+            console.log(`NavigatING FROM ${args.object}, isBackNavigation: ${args.isBackNavigation}`);
         });
-        that.on(Page.navigatedFromEvent, (args) => {
-            console.log(`${args.object}.navigatedFromEvent`);
+        that.on(Page.navigatedFromEvent, (args: NavigatedData) => {
+            console.log(`NaviagatED FROM ${args.object}, isBackNavigation: ${args.isBackNavigation}`);
         });
-        that.on(Page.navigatingToEvent, (args) => {
-            console.log(`${args.object}.navigatingToEvent`);
+        that.on(Page.navigatingToEvent, (args: NavigatedData) => {
+            console.log(`NavigatING TO ${args.object}, isBackNavigation: ${args.isBackNavigation}`);
         });
-        that.on(Page.navigatedToEvent, (args) => {
-            console.log(`${args.object}.navigatedToEvent`);
+        that.on(Page.navigatedToEvent, (args: NavigatedData) => {
+            console.log(`NavigatED TO ${args.object}, isBackNavigation: ${args.isBackNavigation}`);
+            (<any>topmostFrame())._printFrameBackStack();
+            if (topmostFrame().android) {
+                (<any>topmostFrame())._printNativeBackStack();
+            }
         });
 
         this.id = "" + context.index;
@@ -121,6 +126,14 @@ export class NavPage extends Page implements definition.ControlsPage {
         var animatedSwitch = new Switch();
         animatedSwitch.checked = context.animated;
         optionsLayout.addChild(animatedSwitch);
+
+        var globalTransitionButton = new Button();
+        globalTransitionButton.text = "global: " + (Frame.defaultTransition ? Frame.defaultTransition.name : "none");
+        globalTransitionButton.on("tap", (args) => {
+            Frame.defaultTransition = Frame.defaultTransition ? null : { name: "fade" };
+            (<any>args.object).text = "global: " + (Frame.defaultTransition ? Frame.defaultTransition.name : "none");
+        });
+        optionsLayout.addChild(globalTransitionButton);
 
         var transitionButton = new Button();
         transitionButton.text = availableTransitions[context.transition];
@@ -202,6 +215,8 @@ export class NavPage extends Page implements definition.ControlsPage {
         });
         stackLayout.addChild(forwardButton);
 
-        this.content = stackLayout;
+        var scrollView = new ScrollView();
+        scrollView.content = stackLayout;
+        this.content = scrollView;
     }
 } 

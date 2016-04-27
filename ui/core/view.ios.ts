@@ -90,20 +90,6 @@ export class View extends viewCommon.View {
         this.requestLayout();
     }
 
-    public onLoaded() {
-        super.onLoaded();
-
-        // TODO: It is very late to work with options here in the onLoaded method.
-        // We should not do anything that affects UI AFTER the widget has been loaded.
-        utils.copyFrom(this._options, this);
-        delete this._options;
-
-        // We do not need to call this in iOS, since the native instance is created immediately
-        // and any props that you set on our instance are immediately synced onto the native one.
-        // _syncNativeProperties makes sense for Android only, where widgets are created later.
-        // this._syncNativeProperties();
-    }
-
     get _nativeView(): UIView {
         return this.ios;
     }
@@ -262,7 +248,7 @@ export class View extends viewCommon.View {
         return {
             x: utils.layout.toDeviceIndependentPixels(pointInWindow.x),
             y: utils.layout.toDeviceIndependentPixels(pointInWindow.y),
-        } 
+        }
     }
 
     public getLocationOnScreen(): viewDefinition.Point {
@@ -275,7 +261,7 @@ export class View extends viewCommon.View {
         return {
             x: utils.layout.toDeviceIndependentPixels(pointOnScreen.x),
             y: utils.layout.toDeviceIndependentPixels(pointOnScreen.y),
-        } 
+        }
     }
 
     public getLocationRelativeTo(otherView: viewDefinition.View): viewDefinition.Point {
@@ -290,7 +276,7 @@ export class View extends viewCommon.View {
         return {
             x: utils.layout.toDeviceIndependentPixels(myPointInWindow.x - otherPointInWindow.x),
             y: utils.layout.toDeviceIndependentPixels(myPointInWindow.y - otherPointInWindow.y),
-        } 
+        }
     }
 
     private _onSizeChanged() {
@@ -340,17 +326,17 @@ export class View extends viewCommon.View {
     // This is done by calling CATransaction begin and commit methods.
     // This action should be disabled when updating those properties during an animation.
     public _suspendPresentationLayerUpdates() {
-      this._suspendCATransaction = true;
+        this._suspendCATransaction = true;
     }
 
     public _resumePresentationLayerUpdates() {
-      this._suspendCATransaction = false;
+        this._suspendCATransaction = false;
     }
 
     public _isPresentationLayerUpdateSuspeneded() {
-      return this._suspendCATransaction;
+        return this._suspendCATransaction;
     }
-  }
+}
 
 export class CustomLayoutView extends View {
 
@@ -394,11 +380,11 @@ export class ViewStyler implements style.Styler {
             ensureBackground();
             var updateSuspended = view._isPresentationLayerUpdateSuspeneded();
             if (!updateSuspended) {
-              CATransaction.begin();
+                CATransaction.begin();
             }
             nativeView.backgroundColor = background.ios.createBackgroundUIColor(view);
             if (!updateSuspended) {
-              CATransaction.commit();
+                CATransaction.commit();
             }
         }
     }
@@ -439,11 +425,11 @@ export class ViewStyler implements style.Styler {
         if (nativeView) {
             var updateSuspended = view._isPresentationLayerUpdateSuspeneded();
             if (!updateSuspended) {
-              CATransaction.begin();
+                CATransaction.begin();
             }
             var alpha = nativeView.alpha = newValue;
             if (!updateSuspended) {
-              CATransaction.commit();
+                CATransaction.commit();
             }
             return alpha;
         }
@@ -581,6 +567,19 @@ export class ViewStyler implements style.Styler {
     private static getTranslateYProperty(view: View): any {
         return view.translateY;
     }
+    
+    //z-index
+    private static setZIndexProperty(view: View, newValue: any) {
+        view.ios.layer.zPosition = newValue;
+    }
+
+    private static resetZIndexProperty(view: View, nativeValue: any) {
+        view.ios.layer.zPosition = nativeValue;
+    }
+
+    private static getZIndexProperty(view: View): any {
+        return view.ios.layer.zPosition;
+    }
 
     public static registerHandlers() {
         style.registerHandler(style.backgroundInternalProperty, new style.StylePropertyChangedHandler(
@@ -635,6 +634,11 @@ export class ViewStyler implements style.Styler {
             ViewStyler.setTranslateYProperty,
             ViewStyler.resetTranslateYProperty,
             ViewStyler.getTranslateYProperty));
+
+        style.registerHandler(style.zIndexProperty, new style.StylePropertyChangedHandler(
+            ViewStyler.setZIndexProperty,
+            ViewStyler.resetZIndexProperty,
+            ViewStyler.getZIndexProperty));
     }
 }
 

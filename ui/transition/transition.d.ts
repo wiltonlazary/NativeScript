@@ -18,11 +18,12 @@
     }
 
     //@private
+    export function _clearBackwardTransitions(fragment: any): void;
     export function _clearForwardTransitions(fragment: any): void;
     export function _setAndroidFragmentTransitions(navigationTransition: frame.NavigationTransition, currentFragment: any, newFragment: any, fragmentTransaction: any): void;
     export function _onFragmentCreateAnimator(fragment: any, nextAnim: number): any;
     export function _onFragmentShown(fragment: any, isBack: boolean): void;
-    export function _onFragmentHidden(fragment: any, isBack: boolean): void;
+    export function _onFragmentHidden(fragment: any, isBack: boolean, destroyed: boolean): void;
 
     export function _createIOSAnimatedTransitioning(navigationTransition: frame.NavigationTransition, nativeCurve: any, operation: number, fromVC: any, toVC: any): any;
     //@endprivate

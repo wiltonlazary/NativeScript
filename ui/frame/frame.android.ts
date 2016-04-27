@@ -61,19 +61,20 @@ function onFragmentShown(fragment: FragmentClass) {
     transitionModule._onFragmentShown(fragment, isBack);
 }
 
-function onFragmentHidden(fragment: FragmentClass) {
+function onFragmentHidden(fragment: FragmentClass, destroyed: boolean) {
     trace.write(`HIDDEN ${fragment.getTag()}`, trace.categories.NativeLifecycle);
 
     if (fragment[CLEARING_HISTORY]) {
-        trace.write(`${fragment.getTag()} has been hidden, but we are currently clearing history. Returning.`, trace.categories.NativeLifecycle);
-        return null;
+        trace.write(`${fragment.getTag()} has been hidden, but we are currently clearing history. Clearing any existing transitions.`, trace.categories.NativeLifecycle);
+        transitionModule._clearBackwardTransitions(fragment);
+        transitionModule._clearForwardTransitions(fragment);
     }
 
     var isBack = fragment.entry[IS_BACK];
     fragment.entry[IS_BACK] = undefined;
 
     // Handle page transitions.
-    transitionModule._onFragmentHidden(fragment, isBack);
+    transitionModule._onFragmentHidden(fragment, isBack, destroyed);
 }
 
 export class Frame extends frameCommon.Frame {
@@ -188,10 +189,10 @@ export class Frame extends frameCommon.Frame {
         if (currentFragment) {
             // There might be transitions left over from previous forward navigations from the current page.
             transitionModule._clearForwardTransitions(currentFragment);
-        }
 
-        if (animated && navigationTransition) {
-            transitionModule._setAndroidFragmentTransitions(navigationTransition, currentFragment, newFragment, fragmentTransaction);
+            if (animated && navigationTransition) {
+                transitionModule._setAndroidFragmentTransitions(navigationTransition, currentFragment, newFragment, fragmentTransaction);
+            }
         }
 
         newFragment.frame = this;
@@ -325,17 +326,6 @@ export class Frame extends frameCommon.Frame {
         while (i >= 0) {
             var fragment = <any>manager.findFragmentByTag(manager.getBackStackEntryAt(i--).getName());
             console.log("[ " + fragment.getTag() + " ]");
-        }
-    }
-
-    public _printFrameBackStack() {
-        var length = this.backStack.length;
-        var i = length - 1;
-        console.log("---------------------------");
-        console.log("Frame Back Stack (" + length + ")");
-        while (i >= 0) {
-            var backstackEntry = <definition.BackstackEntry>this.backStack[i--];
-            console.log("[ " + backstackEntry.resolvedPage.id + " ]");
         }
     }
 
@@ -590,7 +580,7 @@ class FragmentClass extends android.app.Fragment {
         trace.write(`${this.getTag()}.onHiddenChanged(${hidden})`, trace.categories.NativeLifecycle);
         super.onHiddenChanged(hidden);
         if (hidden) {
-            onFragmentHidden(this);
+            onFragmentHidden(this, false);
         }
         else {
             onFragmentShown(this);
@@ -654,14 +644,8 @@ class FragmentClass extends android.app.Fragment {
     public onDestroyView(): void {
         trace.write(`${this.getTag()}.onDestroyView()`, trace.categories.NativeLifecycle);
         super.onDestroyView();
-        onFragmentHidden(this);
-
-        // When Fragment is destroyed we detach page even if cachePagesOnNavigate is true.
-        let entry = this.entry;
-        let page = entry.resolvedPage;
-        if (page._context) {
-            page._onDetached(true);
-        }
+        // Detaching the page has been move in onFragmentHidden due to transitions.
+        onFragmentHidden(this, true);
     }
 
     public onDestroy(): void {

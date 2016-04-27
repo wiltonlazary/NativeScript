@@ -145,6 +145,10 @@
     </Content>
     <Content Include="apps\animations\bkg.png" />
     <Content Include="apps\animations\test-icon.png" />
+    <Content Include="apps\App_Resources\Android\drawable-hdpi\icon.png" />
+    <Content Include="apps\App_Resources\Android\drawable-ldpi\icon.png" />
+    <Content Include="apps\App_Resources\Android\drawable-mdpi\icon.png" />
+    <Content Include="apps\App_Resources\Android\drawable-nodpi\splashscreen.9.png" />
     <Content Include="apps\custom-root-view\list-view.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -274,6 +278,8 @@
       <DependentUpon>action-view.xml</DependentUpon>
     </TypeScriptCompile>
     <TypeScriptCompile Include="apps\ui-tests-app\pages\touch-event.ts" />
+    <Content Include="apps\ui-tests-app\padding\padding.css" />
+    <Content Include="apps\ui-tests-app\padding\padding.xml" />
     <Content Include="apps\ui-tests-app\pages\touch-event.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -1034,6 +1040,8 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="utils\debug.d.ts" />
     <TypeScriptCompile Include="utils\debug.ts" />
+    <TypeScriptCompile Include="utils\lazy.d.ts" />
+    <TypeScriptCompile Include="utils\lazy.ts" />
     <TypeScriptCompile Include="utils\module-merge.ts" />
     <TypeScriptCompile Include="utils\utils.android.ts">
       <DependentUpon>utils.d.ts</DependentUpon>
@@ -2116,6 +2124,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="apps\sample-fonts\package.json" />
+    <Content Include="apps\App_Resources\package.json" />
     <None Include="js-libs\esprima\LICENSE.BSD" />
     <Content Include="source-control.md" />
     <Content Include="ui\segmented-bar\package.json">
