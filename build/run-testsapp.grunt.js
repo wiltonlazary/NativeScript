@@ -52,13 +52,14 @@ module.exports = {
 
             workingDir:".testsapprun",
             testsAppName:"TestsApp",
+            tnsCoreModulesSource: pathModule.resolve("./tns-core-modules"),
             applicationDir: pathModule.join(".testsapprun", "TestsApp"),
             appDir: pathModule.join(".testsapprun", "TestsApp", "app"),
             pathToApk: "./platforms/android/build/outputs/apk/TestsApp-debug.apk",
             pathToApp: "./platforms/ios/build/emulator/TestsApp.app",
             deployedAppName:"org.nativescript.TestsApp",
             mainActivityName:"com.tns.NativeScriptActivity",
-            pathToCompiledTests: "bin/dist/apps/tests",
+            pathToCompiledTests: "bin/dist/tests/app",
             simulatorSysLog: pathModule.join(process.env.HOME, "Library/Logs/CoreSimulator", args.emuAvdName, "/system.log"),
             platform: args.platform
         }
@@ -199,17 +200,19 @@ module.exports = {
                 },
                 startiOSApp: {
                     cmd: "xcrun simctl launch " + localCfg.emuAvdName + " org.nativescript." + localCfg.testsAppName
-                }
-            },
-            untar: {
-                modules: {
-                    src: localCfg.modulesPath,
-                    dest: pathModule.join(localCfg.applicationDir, "node_modules")
+                },
+                "npm-i-modules": {
+                    cmd: "npm i " + pathModule.relative(localCfg.applicationDir, localCfg.modulesPath),
+                    cwd: localCfg.applicationDir
+                },
+                "npm-i-widgets": {
+                    cmd: "npm i tns-core-modules-widgets@next",
+                    cwd: localCfg.applicationDir
                 }
             },
             shell: {
                 collectAndroidLog: {
-                    command: "./expect.exp " + "'adb logcat' " + localCfg.outFile,
+                    command: "./expect.exp " + "'adb logcat *:D' " + localCfg.outFile,
                     options: {
                         execOptions: {
                             maxBuffer: Infinity
@@ -256,7 +259,6 @@ module.exports = {
         grunt.loadNpmTasks("grunt-mkdir");
         grunt.loadNpmTasks("grunt-contrib-clean");
         grunt.loadNpmTasks("grunt-contrib-copy");
-        grunt.loadNpmTasks("grunt-untar");
 
         var getPlatformSpecificTask = function(templatedTaskName) {
             return templatedTaskName.replace(/\{platform\}/, localCfg.platform);
@@ -297,7 +299,8 @@ module.exports = {
             "clean:originalAppDir",
             "copy:testsAppToRunDir",
             "clean:modules",
-            "untar:modules",
+            "exec:npm-i-modules",
+            "exec:npm-i-widgets",
             "copy:modulesToDir",
             "clean:tempExtractedModules",
 

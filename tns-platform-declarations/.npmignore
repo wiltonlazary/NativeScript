@@ -1,0 +1,7 @@
+*.tgz
+package
+test.ts
+test.js
+test.js.map
+tsconfig.json
+typings-gen.sh

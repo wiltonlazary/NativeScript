@@ -1,18 +1,37 @@
-Dear friend, we, the rest of the NativeScript community thank you for your
-contribution! Because we want to present a really nice, readable changelog with each
-release, please provide the following information:
+<!--
+We, the rest of the NativeScript community, thank you for your
+contribution! 
+To help the rest of the community review your change, please follow the instructions in the template.
+-->
 
-### Create a meaningful title
-Please, ensure your title is less than 50 characters and starts with a capital
-letter. We strive to follow the guidelines in the
-[How to Write a Git Commit Message] (http://chris.beams.io/posts/git-commit/)
-article for PR titles.
+<!-- PULL REQUEST TEMPLATE -->
+<!-- (Update "[ ]" to "[x]" to check a box) -->
 
-### Does your commit message include the wording below to reference a specific issue in this repo?
-Fixes/Implements #[Issue Number].
+## PR Checklist
 
-### Does your pull request have [unit tests](https://github.com/NativeScript/NativeScript/blob/master/running-tests.md)?
-If not, why?
-If not, please tell us why tests are not included, and list all steps needed to test your pull request manually.
+- [ ] The PR title follows our guidelines: https://github.com/NativeScript/NativeScript/blob/master/CONTRIBUTING.md#commit-messages.
+- [ ] There is an issue for the bug/feature this PR is for. To avoid wasting your time, it's best to open a suggestion issue first and wait for approval before working on it.
+- [ ] You have signed the [CLA](http://www.nativescript.org/cla).
+- [ ] All existing tests are passing: https://github.com/NativeScript/NativeScript/blob/master/DevelopmentWorkflow.md#running-unit-tests.
+- [ ] Tests for the changes are included - https://github.com/NativeScript/NativeScript/blob/master/WritingUnitTests.md.
 
+## What is the current behavior?
+<!-- Please describe the current behavior that you are modifying, or link to a relevant issue. -->
+
+## What is the new behavior?
+<!-- Describe the changes. -->
+
+Fixes/Implements/Closes #[Issue Number].
+
+<!-- If this PR contains a breaking change, please describe the impact and migration path for existing applications below. -->
+
+<!-- 
+BREAKING CHANGES:
+
+
+[Describe the impact of the changes here.]
+
+Migration steps:
+[Provide a migration path for existing applications.]
+-->
 

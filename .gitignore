@@ -1,17 +1,56 @@
-# generated files
+# Folders
+dist
+hooks
+libs
+node_modules
+package
+platforms
+!tns-core-modules/platforms
+reports
+tags
+
+# Files
+package-lock.json
+.DS_Store
+.nsbuildinfo
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Appium files
+e2e/**/*.trace/
+e2e/**/test-results.xml
+
+# Webpack configuration files
+webpack.config.js
+tsconfig.esm.json
+tsconfig.tns.json
+
+# Generated files
 *.map
 *.tgz
 .baseDir.ts
 .sublime-grunt.cache
 tscommand*.tmp.txt
 .tscache
-.vscode
 
-node_modules/
-dist/
-package/
-
+# Other
 *.js
+# https://github.com/NativeScript/nativescript-dev-webpack/issues/932
+!tns-core-modules/xml/xml.js
+!tests/hooks/**/*.*
 !gruntfile.js
 !js-libs/**/*.*
 !css/**/*.*
@@ -19,18 +58,10 @@ package/
 !fetch/**/*.*
 !apps/TelerikNEXT/lib/**/*.*
 !build/**/*.*
-CrossPlatformModules.sln.ide/
-*.suo
-CrossPlatformModules.suo
-CrossPlatformModules.v14.suo
-CrossPlatformModules.csproj.user
-bin/
-obj/
 .vs/
 
 .baseDir.ts
 .ctags-exclude
-tags
 
 TestRunResult.txt
 .testsapprun
